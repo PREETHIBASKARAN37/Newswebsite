@@ -56,6 +56,7 @@
             max-width: 300px;
             padding: 15px;
             transition: transform 0.2s;
+            color: #ecf0f1;
         }
 
         .news-card:hover {
@@ -65,7 +66,6 @@
         .news-card h3 {
             margin-top: 0;
             font-size: 18px;
-            color: #ecf0f1;
         }
 
         .news-card p {
@@ -144,7 +144,6 @@
             const url = `${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
 
             try {
-                console.log(`Fetching from URL: ${url}`); // Debugging line
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
