@@ -9,57 +9,91 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #e0e0e0;
         }
 
         header {
             background: #333;
             color: #fff;
-            padding: 10px;
+            padding: 15px;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         header select {
-            margin-left: 10px;
+            margin: 0 10px;
+            padding: 5px;
+            font-size: 16px;
         }
 
         main {
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #news-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .news-card {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 300px;
             padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .news-card:hover {
+            transform: scale(1.02);
         }
 
         .news-card h3 {
             margin-top: 0;
+            font-size: 18px;
+            color: #333;
         }
 
-        .hidden {
-            display: none;
+        .news-card p {
+            color: #555;
+            font-size: 14px;
         }
 
-        #loading {
+        .news-card a {
+            display: block;
+            margin-top: 10px;
+            text-align: right;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .news-card a:hover {
+            text-decoration: underline;
+        }
+
+        #loading, #error {
             text-align: center;
             font-size: 18px;
+            color: #333;
+        }
+
+        #loading.hidden, #error.hidden {
+            display: none;
         }
 
         #error {
             color: red;
-            text-align: center;
-            font-size: 18px;
         }
     </style>
 </head>
@@ -67,14 +101,14 @@
     <header>
         <h1>News Dashboard</h1>
         <div>
-            <label for="region">Select Region:</label>
+            <label for="region">Region:</label>
             <select id="region">
                 <option value="us">United States</option>
                 <option value="gb">United Kingdom</option>
                 <option value="ca">Canada</option>
                 <option value="int">International</option>
             </select>
-            <label for="category">Select Category:</label>
+            <label for="category">Category:</label>
             <select id="category">
                 <option value="">All</option>
                 <option value="sports">Sports</option>
@@ -109,11 +143,12 @@
 
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 
                 const data = await response.json();
                 displayNews(data.articles);
             } catch (error) {
+                console.error('Fetch Error:', error); // Log detailed error message
                 errorIndicator.textContent = `Error: ${error.message}`;
                 errorIndicator.classList.remove('hidden');
             } finally {
