@@ -125,30 +125,27 @@
         <div id="error" class="hidden">Error loading news. Please try again later.</div>
     </main>
     <script>
-        // Your API Key and URL
         const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
         const API_URL = 'https://newsapi.org/v2/top-headlines';
 
-        // DOM elements
         const regionSelect = document.getElementById('region');
         const categorySelect = document.getElementById('category');
         const newsContainer = document.getElementById('news-container');
         const loadingIndicator = document.getElementById('loading');
         const errorIndicator = document.getElementById('error');
 
-        // Fetch news from API
         async function fetchNews(region = 'us', category = '') {
             loadingIndicator.classList.remove('hidden');
             errorIndicator.classList.add('hidden');
             newsContainer.innerHTML = '';
 
+            // Build the URL with query parameters
             const url = `${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
 
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
                 const data = await response.json();
@@ -162,7 +159,6 @@
             }
         }
 
-        // Display news articles
         function displayNews(articles) {
             if (articles.length === 0) {
                 newsContainer.innerHTML = '<p>No news articles found.</p>';
@@ -180,14 +176,12 @@
             });
         }
 
-        // Handle select change events
         function handleSelectChange() {
             const region = regionSelect.value;
             const category = categorySelect.value;
             fetchNews(region, category);
         }
 
-        // Event listeners
         regionSelect.addEventListener('change', handleSelectChange);
         categorySelect.addEventListener('change', handleSelectChange);
 
