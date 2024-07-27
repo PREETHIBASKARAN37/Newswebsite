@@ -143,7 +143,10 @@
 
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+                }
                 
                 const data = await response.json();
                 displayNews(data.articles);
