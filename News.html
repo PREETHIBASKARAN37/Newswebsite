@@ -8,199 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0; 
-            background-color: #e0e0e0;
-        }
-
-        header {
-            background: #333;
-            color: #fff;
-            padding: 15px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        header select {
-            margin: 0 10px;
-            padding: 5px;
-            font-size: 16px;
-        }
-
-        main {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #news-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .news-card {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 300px;
-            padding: 15px;
-            transition: transform 0.2s;
-        }
-
-        .news-card:hover {
-            transform: scale(1.02);
-        }
-
-        .news-card h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .news-card p {
-            color: #555;
-            font-size: 14px;
-        }
-
-        .news-card a {
-            display: block;
-            margin-top: 10px;
-            text-align: right;
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        .news-card a:hover {
-            text-decoration: underline;
-        }
-
-        #loading, #error {
-            text-align: center;
-            font-size: 18px;
-            color: #333;
-        }
-
-        #loading.hidden, #error.hidden {
-            display: none;
-        }
-
-        #error {
-            color: red;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>News Dashboard</h1>
-        <div>
-            <label for="region">Region:</label>
-            <select id="region">
-                <option value="us">United States</option>
-                <option value="gb">United Kingdom</option>
-                <option value="ca">Canada</option>
-                <option value="int">International</option>
-            </select>
-            <label for="category">Category:</label>
-            <select id="category">
-                <option value="">All</option>
-                <option value="sports">Sports</option>
-                <option value="finance">Finance</option>
-                <option value="technology">Technology</option>
-            </select>
-        </div>
-    </header>
-    <main>
-        <div id="news-container">
-            <!-- News cards will be injected here -->
-        </div>
-        <div id="loading" class="hidden">Loading...</div>
-        <div id="error" class="hidden">Error loading news. Please try again later.</div>
-    </main>
-    <script>
-        const API_URL = 'https://newsapi.org/v2/top-headlines';
-        const API_KEY = 'YOUR_API_KEY'; // Replace with your actual News API key
-
-        const regionSelect = document.getElementById('region');
-        const categorySelect = document.getElementById('category');
-        const newsContainer = document.getElementById('news-container');
-        const loadingIndicator = document.getElementById('loading');
-        const errorIndicator = document.getElementById('error');
-
-        async function fetchNews(region = 'us', category = '') {
-            loadingIndicator.classList.remove('hidden');
-            errorIndicator.classList.add('hidden');
-            newsContainer.innerHTML = '';
-
-            const url = ${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY};
-
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(HTTP error! Status: ${response.status});
-                }
-                
-                const data = await response.json();
-                if (!data.articles) {
-                    throw new Error('Unexpected response format');
-                }
-                displayNews(data.articles);
-            } catch (error) {
-                console.error('Fetch Error:', error);
-                errorIndicator.textContent = Error: ${error.message};
-                errorIndicator.classList.remove('hidden');
-            } finally {
-                loadingIndicator.classList.add('hidden');
-            }
-        }
-
-        function displayNews(articles) {
-            if (articles.length === 0) {
-                newsContainer.innerHTML = '<p>No news articles found.</p>';
-                return;
-            }
-            articles.forEach(article => {
-                const card = document.createElement('div');
-                card.className = 'news-card';
-                card.innerHTML = `
-                    <h3>${article.title}</h3>
-                    <p>${article.description || 'No description available'}</p>
-                    <a href="${article.url}" target="_blank">Read more</a>
-                `;
-                newsContainer.appendChild(card);
-            });
-        }
-
-        function handleSelectChange() {
-            const region = regionSelect.value;
-            const category = categorySelect.value;
-            fetchNews(region, category);
-        }
-
-        regionSelect.addEventListener('change', handleSelectChange);
-        categorySelect.addEventListener('change', handleSelectChange);
-
-        // Initial fetch
-        fetchNews();
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
             padding: 0;
             background-color: #e0e0e0;
         }
@@ -332,12 +139,12 @@
             errorIndicator.classList.add('hidden');
             newsContainer.innerHTML = '';
 
-            const url = ${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY};
+            const url = `${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
 
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
-                    throw new Error(HTTP error! Status: ${response.status});
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
                 const data = await response.json();
@@ -347,7 +154,7 @@
                 displayNews(data.articles);
             } catch (error) {
                 console.error('Fetch Error:', error);
-                errorIndicator.textContent = Error: ${error.message};
+                errorIndicator.textContent = `Error: ${error.message}`;
                 errorIndicator.classList.remove('hidden');
             } finally {
                 loadingIndicator.classList.add('hidden');
