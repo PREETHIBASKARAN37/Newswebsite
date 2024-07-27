@@ -125,7 +125,7 @@
         <div id="error" class="hidden">Error loading news. Please try again later.</div>
     </main>
     <script>
-        const PROXY_URL = 'https://api.allorigins.win/raw?url='; // Alternative CORS proxy
+        const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
         const API_URL = 'https://newsapi.org/v2/top-headlines';
         const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
 
@@ -145,15 +145,10 @@
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
-                    // Handle non-2xx HTTP response codes
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
                 const data = await response.json();
-                if (!data.articles) {
-                    throw new Error('Unexpected response format');
-                }
                 displayNews(data.articles);
             } catch (error) {
                 console.error('Fetch Error:', error);
