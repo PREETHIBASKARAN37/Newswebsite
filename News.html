@@ -140,7 +140,7 @@
             errorIndicator.classList.add('hidden');
             newsContainer.innerHTML = '';
 
-            const url = `${PROXY_URL}${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
+            const url = `${PROXY_URL}${encodeURIComponent(`${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`)}`;
 
             try {
                 const response = await fetch(url);
