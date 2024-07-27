@@ -125,8 +125,9 @@
         <div id="error" class="hidden">Error loading news. Please try again later.</div>
     </main>
     <script>
-        const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
+        const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
         const API_URL = 'https://newsapi.org/v2/top-headlines';
+        const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
 
         const regionSelect = document.getElementById('region');
         const categorySelect = document.getElementById('category');
@@ -139,8 +140,7 @@
             errorIndicator.classList.add('hidden');
             newsContainer.innerHTML = '';
 
-            // Build the URL with query parameters
-            const url = `${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
+            const url = `${PROXY_URL}${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
 
             try {
                 const response = await fetch(url);
