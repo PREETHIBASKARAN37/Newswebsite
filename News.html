@@ -9,24 +9,31 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e0e0e0;
+            background-color: #f4f4f4;
         }
 
         header {
-            background: #333;
+            background: #202124;
             color: #fff;
-            padding: 15px;
-            text-align: center;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
+            gap: 15px;
             flex-wrap: wrap;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
         }
 
         header select {
             margin: 0 10px;
-            padding: 5px;
+            padding: 10px;
             font-size: 16px;
+            border: none;
+            border-radius: 5px;
         }
 
         main {
@@ -37,26 +44,37 @@
         }
 
         #news-container {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
         }
 
         .news-card {
             background: #fff;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 15px;
-            transition: transform 0.2s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .news-card:hover {
-            transform: scale(1.02);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-card img {
+            width: 100%;
+            border-radius: 5px;
+            object-fit: cover;
+            height: 150px;
+            margin-bottom: 10px;
         }
 
         .news-card h3 {
@@ -66,16 +84,17 @@
         }
 
         .news-card p {
-            color: #555;
+            color: #666;
             font-size: 14px;
+            flex: 1;
         }
 
         .news-card a {
-            display: block;
             margin-top: 10px;
             text-align: right;
             color: #007BFF;
             text-decoration: none;
+            font-weight: bold;
         }
 
         .news-card a:hover {
@@ -86,6 +105,7 @@
             text-align: center;
             font-size: 18px;
             color: #333;
+            margin-top: 20px;
         }
 
         #loading.hidden, #error.hidden {
@@ -106,6 +126,8 @@
                 <option value="us">United States</option>
                 <option value="gb">United Kingdom</option>
                 <option value="ca">Canada</option>
+                <option value="au">Australia</option>
+                <option value="in">India</option>
                 <option value="int">International</option>
             </select>
             <label for="category">Category:</label>
@@ -114,6 +136,9 @@
                 <option value="sports">Sports</option>
                 <option value="finance">Finance</option>
                 <option value="technology">Technology</option>
+                <option value="health">Health</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="science">Science</option>
             </select>
         </div>
     </header>
@@ -126,7 +151,7 @@
     </main>
     <script>
         const API_URL = 'https://newsapi.org/v2/top-headlines';
-        const API_KEY = 'YOUR_API_KEY'; // Replace with your actual News API key
+        const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
 
         const regionSelect = document.getElementById('region');
         const categorySelect = document.getElementById('category');
@@ -170,6 +195,7 @@
                 const card = document.createElement('div');
                 card.className = 'news-card';
                 card.innerHTML = `
+                    ${article.urlToImage ? `<img src="${article.urlToImage}" alt="News Image">` : ''}
                     <h3>${article.title}</h3>
                     <p>${article.description || 'No description available'}</p>
                     <a href="${article.url}" target="_blank">Read more</a>
