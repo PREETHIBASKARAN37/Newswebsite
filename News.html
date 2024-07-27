@@ -125,9 +125,20 @@
         <div id="error" class="hidden">Error loading news. Please try again later.</div>
     </main>
     <script>
-        const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
-        const API_URL = 'https://newsapi.org/v2/top-headlines';
+        //const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
+        //const API_URL = 'https://newsapi.org/v2/top-headlines';
+        var API_URL = 'https://newsapi.org/v2/everything?' +
+          'q=Apple&' +
+          'from=2024-07-27&' +
+          'sortBy=popularity&' +
+          'apiKey=47e2d0eaaf1a4128a7ff6acff2fb9ae8';
 
+           var req = new Request(url);
+
+            fetch(req)
+            .then(function(response) {
+        console.log(response.json());
+        })
         const regionSelect = document.getElementById('region');
         const categorySelect = document.getElementById('category');
         const newsContainer = document.getElementById('news-container');
