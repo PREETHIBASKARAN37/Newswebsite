@@ -3,62 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Test</title>
+    <title>News Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             background-color: #121212;
             color: #e0e0e0;
             text-align: center;
-            padding: 20px;
         }
+
+        header {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        header select {
+            margin: 0 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #news-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .news-card {
             background: #1c1c1c;
+            border: 1px solid #333;
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            width: 300px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 350px;
             padding: 20px;
+            transition: transform 0.2s;
             color: #e0e0e0;
         }
+
+        .news-card:hover {
+            transform: scale(1.05);
+        }
+
         .news-card h3 {
             margin-top: 0;
+            font-size: 18px;
         }
-        .news-card img {
-            width: 100%;
-            border-radius: 8px;
+
+        .news-card p {
+            font-size: 14px;
+            color: #bbb;
         }
+
+        .news-card a {
+            display: block;
+            margin-top: 10px;
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        .news-card a:hover {
+            text-decoration: underline;
+        }
+
         #loading, #error {
             font-size: 18px;
             color: #e0e0e0;
         }
+
         #error {
             color: #ff6f6f;
+        }
+
+        #loading.hidden, #error.hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h1>News Test</h1>
-    <div id="news-container">
-        <!-- News cards will be injected here -->
-    </div>
-    <div id="loading">Loading...</div>
-    <div id="error" class="hidden">Error loading news. Please try again later.</div>
-
+    <header>
+        <h1>News Dashboard</h1>
+        <div>
+            <label for="region">Region:</label>
+            <select id="region">
+                <option value="us">United States</option>
+                <option value="gb">United Kingdom</option>
+                <option value="ca">Canada</option>
+                <option value="int">International</option>
+            </select>
+            <label for="category">Category:</label>
+            <select id="category">
+                <option value="">All</option>
+                <option value="sports">Sports</option>
+                <option value="finance">Finance</option>
+                <option value="technology">Technology</option>
+                <option value="health">Health</option>
+                <option value="science">Science</option>
+                <option value="entertainment">Entertainment</option>
+            </select>
+        </div>
+    </header>
+    <main>
+        <div id="news-container">
+            <!-- News cards will be injected here -->
+        </div>
+        <div id="loading">Loading...</div>
+        <div id="error" class="hidden">Error loading news. Please try again later.</div>
+    </main>
     <script>
+        const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
         const API_URL = 'https://newsapi.org/v2/top-headlines';
         const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
 
+        const regionSelect = document.getElementById('region');
+        const categorySelect = document.getElementById('category');
         const newsContainer = document.getElementById('news-container');
         const loadingIndicator = document.getElementById('loading');
         const errorIndicator = document.getElementById('error');
 
-        async function fetchNews() {
+        async function fetchNews(region = 'us', category = '') {
             loadingIndicator.classList.remove('hidden');
             errorIndicator.classList.add('hidden');
             newsContainer.innerHTML = '';
 
-            const url = `${API_URL}?country=us&apiKey=${API_KEY}`;
+            const url = `${PROXY_URL}${API_URL}?country=${region}&category=${category}&apiKey=${API_KEY}`;
 
             try {
                 const response = await fetch(url);
@@ -97,6 +181,15 @@
                 newsContainer.appendChild(card);
             });
         }
+
+        function handleSelectChange() {
+            const region = regionSelect.value;
+            const category = categorySelect.value;
+            fetchNews(region, category);
+        }
+
+        regionSelect.addEventListener('change', handleSelectChange);
+        categorySelect.addEventListener('change', handleSelectChange);
 
         // Initial fetch
         fetchNews();
