@@ -106,7 +106,6 @@
                 <option value="us">United States</option>
                 <option value="gb">United Kingdom</option>
                 <option value="ca">Canada</option>
-                
                 <option value="int">International</option>
             </select>
             <label for="category">Category:</label>
@@ -128,7 +127,7 @@
     <script>
         const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
         const API_URL = 'https://newsapi.org/v2/top-headlines';
-        const API_KEY = '47e2d0eaaf1a4128a7ff6acff2fb9ae8'; // Replace with your actual News API key
+        const API_KEY = 'YOUR_API_KEY'; // Replace with your actual News API key
 
         const regionSelect = document.getElementById('region');
         const categorySelect = document.getElementById('category');
@@ -136,7 +135,15 @@
         const loadingIndicator = document.getElementById('loading');
         const errorIndicator = document.getElementById('error');
 
+        const cache = {};
+
         async function fetchNews(region = 'us', category = '') {
+            const cacheKey = `${region}_${category}`;
+            if (cache[cacheKey]) {
+                displayNews(cache[cacheKey]);
+                return;
+            }
+
             loadingIndicator.classList.remove('hidden');
             errorIndicator.classList.add('hidden');
             newsContainer.innerHTML = '';
@@ -150,6 +157,10 @@
                 }
                 
                 const data = await response.json();
+                if (!data.articles) {
+                    throw new Error('Unexpected response format');
+                }
+                cache[cacheKey] = data.articles;
                 displayNews(data.articles);
             } catch (error) {
                 console.error('Fetch Error:', error);
@@ -169,6 +180,7 @@
                 const card = document.createElement('div');
                 card.className = 'news-card';
                 card.innerHTML = `
+                    ${article.urlToImage ? `<img src="${article.urlToImage}" alt="News Image" style="width: 100%; height: auto; border-radius: 4px;">` : ''}
                     <h3>${article.title}</h3>
                     <p>${article.description || 'No description available'}</p>
                     <a href="${article.url}" target="_blank">Read more</a>
